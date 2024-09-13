@@ -7,14 +7,20 @@ import {
   FormErrorMessage,
   Input,
   Heading,
+  useConst,
+  Text,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import TextField from "./TexField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import * as Yup from "yup";
+import { AccountContext } from "../AccountContext";
+import { useContext, useState } from "react";
 
 export default function SignUp() {
+  const { setUser } = useContext(AccountContext);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   return (
     <Formik
@@ -52,7 +58,12 @@ export default function SignUp() {
           })
           .then((data) => {
             if (!data) return;
-            Console.log(data);
+            setUser({ ...data });
+            if (data.loggedIn) {
+              navigate("/home");
+            } else if (data.status) {
+              setError(data.status);
+            }
           });
       }}
     >
@@ -65,6 +76,9 @@ export default function SignUp() {
         spacing="1rem"
       >
         <Heading>Sign Up</Heading>
+        <Text as="p" color="red.500">
+          {error}
+        </Text>
         <TextField
           name="username"
           autoComplete="off"
