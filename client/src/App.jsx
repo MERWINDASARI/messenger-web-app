@@ -4,12 +4,10 @@ import Views from "./components/Views";
 import UserContext from "./components/AccountContext";
 function App() {
   return (
-    <div className="App">
-      <UserContext>
-        <Views />
-        <ToggleColorMode />
-      </UserContext>
-    </div>
+    <UserContext>
+      <Views />
+      <ToggleColorMode />
+    </UserContext>
   );
 }
 

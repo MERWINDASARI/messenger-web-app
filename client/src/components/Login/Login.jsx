@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import TextField from "./TexField";
+import TextField from "../TexField";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import { AccountContext } from "../AccountContext";

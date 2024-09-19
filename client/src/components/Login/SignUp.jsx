@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import TextField from "./TexField";
+import TextField from "../TexField";
 import { useNavigate } from "react-router";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import * as Yup from "yup";
