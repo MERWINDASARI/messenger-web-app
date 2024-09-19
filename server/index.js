@@ -1,55 +1,50 @@
-const { Socket } = require("dgram");
 const express = require("express");
-const redisClient = require("./redis");
 const { Server } = require("socket.io");
 const app = express();
 const helmet = require("helmet");
 const cors = require("cors");
 const server = require("http").createServer(app);
 const authRouter = require("./routers/authRouter");
-const session = require("express-session");
-//not able to pass session to instantiate redisstore giving
-const RedisStore = require("connect-redis").default;
-require("dotenv").config();
+const {
+  corsConfig,
+  sessionMiddleware,
+  wrap,
+} = require("./controllers/serverController");
+const {
+  authorizeUser,
+  addFriend,
+  initializeUser,
+  onDisconnect,
+  dm,
+} = require("./controllers/socketController");
+
 const io = new Server(server, {
-  cosrs: {
-    origin: "http://localhost:5173",
-    credentials: "true",
-  },
+  cors: corsConfig,
 });
 
 //middle ware
 app.use(helmet());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cors(corsConfig));
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    credentials: false,
-    name: "sid",
-    store: new RedisStore({ client: redisClient }),
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.ENVIRONMENT === "production",
-      httpOnly: true,
-      expires: 1000 * 60 * 60 * 24 * 7,
-      sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
-    },
-  })
-);
+app.use(sessionMiddleware);
 app.use("/auth", authRouter);
 
-// app.get("/", (req, res) => {
-//   res.json("hi");
-// });
+io.use(wrap(sessionMiddleware));
+//authorize the user to use socket
+io.use(authorizeUser);
+io.on("connect", (socket) => {
+  initializeUser(socket);
 
-io.on("connect", (Socket) => {});
+  socket.on("add_friend", (friendName, cb) => {
+    addFriend(socket, friendName, cb);
+  });
+
+  socket.on("dm", (message) => {
+    dm(socket, message);
+  });
+
+  socket.on("disconnect", () => onDisconnect(socket));
+});
 
 server.listen(4000, () => {
   console.log("Server listing on port 4000");
