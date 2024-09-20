@@ -1,4 +1,6 @@
-# messenger-web-app (Full stack web app)
+
+# messenger-web-app (Full stack web app)![chatHome](https://github.com/user-attachments/assets/105eced3-7a76-4afb-a9dd-c5b8a53f7cf5)
+
   # Front End
  - React : UI
  - Formik : User inputs
@@ -10,3 +12,4 @@
  - SocketIO : Real time communication
  - PostgreSQL : User accounts 
  - Redis : To store chats
+![chatLogin](https://github.com/user-attachments/assets/0fefc009-52d7-475d-b77a-659f69a0629d)
