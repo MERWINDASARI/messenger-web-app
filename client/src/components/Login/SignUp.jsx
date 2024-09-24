@@ -39,7 +39,7 @@ export default function SignUp() {
         const vals = { ...values };
         actions.resetForm();
 
-        fetch("http://localhost:4000/auth/register", {
+        fetch(`${import.meta.env.VITE_SERVER_URL}/auth/register`, {
           method: "POST",
           credentials: "include",
           headers: {

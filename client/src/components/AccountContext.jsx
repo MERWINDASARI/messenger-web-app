@@ -1,12 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-
 export const AccountContext = createContext();
 export default function UserContext({ children }) {
   const [user, setUser] = useState({ loggedIn: null });
   const navigate = useNavigate();
+
   useEffect(() => {
-    fetch("http://localhost:4000/auth/login", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
       credentials: "include",
     })
       .catch((err) => {
