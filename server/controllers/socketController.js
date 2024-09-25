@@ -2,6 +2,7 @@ const redisClient = require("../redis");
 
 module.exports.authorizeUser = (socket, next) => {
   if (!socket.request.session || !socket.request.session.user) {
+    console.log(socket.request);
     console.log("Bad Request!");
     next(new Error("Not Authorized"));
   } else {
