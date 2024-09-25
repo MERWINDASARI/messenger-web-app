@@ -45,7 +45,7 @@ export default function Sidebar() {
           {friendList.map((friend) => (
             <HStack as={Tab} key={`friend:${friend.username}`}>
               <Circle
-                bg={friend.connected ? "green.500" : "red.500"}
+                bg={"" + friend.connected === "true" ? "green.500" : "red.500"}
                 h="20px"
                 w="20px"
               ></Circle>
